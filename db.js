@@ -17,7 +17,6 @@ class driver extends Model {
     static get tableName() {
         return 'driver';
     }
-
     static get relationMappings(){
         return {
             vehicles: {
@@ -47,7 +46,6 @@ class driver extends Model {
         }
     }
 }
-
 class vehicle extends Model {
     static get tableName() {
         return 'vehicle';
@@ -117,6 +115,57 @@ class ride extends Model {
         }
     }
 }
+class state extends Model {
+    static get tableName() {
+        return 'state';
+    }
+    static get relationMappings(){
+        return {
+            drivers: {
+                relation: Model.ManyToManyRelation,
+                modelClass: state,
+                join: {
+                    from: 'state.abbreviation',
+                    to: 'location.state'
+                }
+            }
+        }
+    }
+}
+
+class location extends Model {
+    static get tableName() {
+        return 'Location';
+    }
+    static get relationMappings(){
+        return {
+            state: {
+                relation: Model.ManyToManyRelation,
+                modelClass: location,
+                join: {
+                    from: 'location.state',
+                    to: 'state.abbreviation'
+                }
+            },
+            ride_depart:{
+                relation: Model.HasManyRelation,
+                modelClass: ride,
+                join:{
+                    from:'location.id',
+                    to:'ride.fromLocationId'
+                }
+            },
+            ride_leave:{
+                relation: Model.HasManyRelation,
+                modelClass: ride,
+                join:{
+                    from:'location.id',
+                    to:'ride.toLocationId'
+                }
+            }
+        }
+    }
+}
 
 class vehicle_type extends Model {
     static get tableName(){
@@ -136,6 +185,7 @@ class vehicle_type extends Model {
     }
 }
 
+<<<<<<< HEAD
 class passenger extends Model {
     static get tableName(){
         return 'passenger';
@@ -160,6 +210,46 @@ class passenger extends Model {
 driver.query()
     .then(result => {
         console.log(result);
+=======
+// vehicle.query()
+//     .then(vehicle => {
+//         console.log(vehicle[0]);
+//     })
+//     .catch((err)=>{
+//         console.log(err);
+//         throw err;
+//     })
+//     .finally(()=>{
+//         knex.destroy();
+//     });
+//
+// driver.query()
+//     .then(driver => {
+//         console.log(driver[0]);
+//     })
+//     .catch((err)=>{
+//         console.log(err);
+//         throw err;
+//     })
+//     .finally(()=>{
+//         knex.destroy();
+//     });
+
+// location.query()
+//     .then(location => {
+//         console.log(location[0]);
+//     })
+//     .catch((err)=>{
+//         console.log(err);
+//         throw err;
+//     })
+//     .finally(()=>{
+//         knex.destroy();
+//     });
+state.query()
+    .then(state => {
+        console.log(state[0]);
+>>>>>>> 72b65909ad52cf211a16c7dace21bc990fcd8740
     })
     .catch((err)=>{
         console.log(err);
@@ -167,6 +257,7 @@ driver.query()
     })
     .finally(()=>{
         knex.destroy();
+<<<<<<< HEAD
     });
 
     // vehicle.query()
@@ -176,3 +267,6 @@ driver.query()
 //      .from('driver')
 //      .then(result => console.log(result))
 //      .then(() => knex.destroy());
+=======
+    });
+>>>>>>> 72b65909ad52cf211a16c7dace21bc990fcd8740
