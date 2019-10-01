@@ -111,6 +111,18 @@ class ride extends Model {
                     from: 'ride.vehicleId',
                     to: 'vehicle.id'
                 }
+            },
+            passengers: {
+                relation: Model.ManyToManyRelation,
+                modelClass: passenger,
+                join: {
+                    from: 'ride.id',
+                    through: {
+                        from: 'passengers.rideId',
+                        to: 'passengers.passengerId'
+                    },
+                    to: 'passenger.id'
+                }
             }
         }
     }
@@ -185,7 +197,6 @@ class vehicle_type extends Model {
     }
 }
 
-<<<<<<< HEAD
 class passenger extends Model {
     static get tableName(){
         return 'passenger';
@@ -198,11 +209,11 @@ class passenger extends Model {
                 join: {
                     from: 'passenger.id',
                     through: {
-                        from: passengers.passengerId,
-                        to: rideId
-                    }
+                        from: 'passengers.passengerId',
+                        to: 'passengers.rideId'
+                    },
+                    to: 'ride.id'
                 }
-
             }
         }
     }
@@ -210,7 +221,8 @@ class passenger extends Model {
 driver.query()
     .then(result => {
         console.log(result);
-=======
+    })
+    ;
 // vehicle.query()
 //     .then(vehicle => {
 //         console.log(vehicle[0]);
@@ -235,21 +247,9 @@ driver.query()
 //         knex.destroy();
 //     });
 
-// location.query()
-//     .then(location => {
-//         console.log(location[0]);
-//     })
-//     .catch((err)=>{
-//         console.log(err);
-//         throw err;
-//     })
-//     .finally(()=>{
-//         knex.destroy();
-//     });
-state.query()
-    .then(state => {
-        console.log(state[0]);
->>>>>>> 72b65909ad52cf211a16c7dace21bc990fcd8740
+location.query()
+    .then(location => {
+        console.log(location[0]);
     })
     .catch((err)=>{
         console.log(err);
@@ -257,16 +257,15 @@ state.query()
     })
     .finally(()=>{
         knex.destroy();
-<<<<<<< HEAD
     });
-
-    // vehicle.query()
-    
-//  knex
-//      .select('firstname')
-//      .from('driver')
-//      .then(result => console.log(result))
-//      .then(() => knex.destroy());
-=======
-    });
->>>>>>> 72b65909ad52cf211a16c7dace21bc990fcd8740
+driver.query()
+    .then(state => {
+        console.log(state[0]);
+    })
+    .catch((err)=>{
+        console.log(err);
+        throw err;
+    })
+    .finally(()=>{
+        knex.destroy();
+    })
