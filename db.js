@@ -112,16 +112,20 @@ class ride extends Model {
                     to: 'vehicle.id'
                 }
             },
-            passengers: {
-                relation: Model.ManyToManyRelation,
-                modelClass: passenger,
+            from_location:{
+              relation: Model.BelongsToOneRelation,
+                modelClass: location,
                 join: {
-                    from: 'ride.id',
-                    through: {
-                        from: 'passengers.rideId',
-                        to: 'passengers.passengerId'
-                    },
-                    to: 'passenger.id'
+                  from: 'ride.fromLocationId',
+                    to: 'location.id'
+                }
+            },
+            to_location:{
+                relation: Model.BelongsToOneRelation,
+                modelClass: location,
+                join: {
+                    from: 'ride.toLocationId',
+                    to: 'location.id'
                 }
             }
         }
