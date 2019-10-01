@@ -17,7 +17,6 @@ class driver extends Model {
     static get tableName() {
         return 'driver';
     }
-
     static get relationMappings(){
         return {
             vehicles: {
@@ -35,7 +34,6 @@ class driver extends Model {
         }
     }
 }
-
 class vehicle extends Model {
     static get tableName() {
         return 'vehicle';
@@ -57,12 +55,97 @@ class vehicle extends Model {
         }
     }
 }
+class state extends Model {
+    static get tableName() {
+        return 'state';
+    }
+    static get relationMappings(){
+        return {
+            drivers: {
+                relation: Model.ManyToManyRelation,
+                modelClass: state,
+                join: {
+                    from: 'state.abbreviation',
+                    to: 'location.state'
+                }
+            }
+        }
+    }
+}
+
+class location extends Model {
+    static get tableName() {
+        return 'Location';
+    }
+    static get relationMappings(){
+        return {
+            state: {
+                relation: Model.ManyToManyRelation,
+                modelClass: location,
+                join: {
+                    from: 'location.state',
+                    to: 'state.abbreviation'
+                }
+            },
+            ride_depart:{
+                relation: Model.HasManyRelation,
+                modelClass: ride,
+                join:{
+                    from:'location.id',
+                    to:'ride.fromLocationId'
+                }
+            },
+            ride_leave:{
+                relation: Model.HasManyRelation,
+                modelClass: ride,
+                join:{
+                    from:'location.id',
+                    to:'ride.toLocationId'
+                }
+            }
+        }
+    }
+}
 
 
+// vehicle.query()
+//     .then(vehicle => {
+//         console.log(vehicle[0]);
+//     })
+//     .catch((err)=>{
+//         console.log(err);
+//         throw err;
+//     })
+//     .finally(()=>{
+//         knex.destroy();
+//     });
+//
+// driver.query()
+//     .then(driver => {
+//         console.log(driver[0]);
+//     })
+//     .catch((err)=>{
+//         console.log(err);
+//         throw err;
+//     })
+//     .finally(()=>{
+//         knex.destroy();
+//     });
 
-driver.query()
-    .then(drivers => {
-        console.log(drivers[0]);
+// location.query()
+//     .then(location => {
+//         console.log(location[0]);
+//     })
+//     .catch((err)=>{
+//         console.log(err);
+//         throw err;
+//     })
+//     .finally(()=>{
+//         knex.destroy();
+//     });
+state.query()
+    .then(state => {
+        console.log(state[0]);
     })
     .catch((err)=>{
         console.log(err);
@@ -71,9 +154,3 @@ driver.query()
     .finally(()=>{
         knex.destroy();
     });
-
-//  knex
-//      .select('firstname')
-//      .from('driver')
-//      .then(result => console.log(result))
-//      .then(() => knex.destroy());
