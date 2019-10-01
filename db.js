@@ -26,10 +26,22 @@ class driver extends Model {
                 join: {
                     from: 'driver.id',
                     through: {
-                        from: 'authorization.driver_id',
-                        to: 'authorization.vehicle_id'
+                        from: 'authorization.driverId',
+                        to: 'authorization.vehicleId'
                     },
                     to: 'vehicle.id'
+                }
+            },
+            rides: {
+                relation: Model.ManyToManyRelation,
+                modelClass: ride,
+                join: {
+                    from: 'driver.id',
+                    through: {
+                        from: 'drivers.driverId',
+                        to: 'rideId'
+                    },
+                    to: 'ride.id'
                 }
             }
         }
@@ -53,16 +65,101 @@ class vehicle extends Model {
                     },
                     to: 'driver.id'
                 }
+            },
+            vehicle_type: {
+                relation: Model.BelongsToOneRelation,
+                modelClass: vehicle_type,
+                join: {
+                    from: 'vehicle.vehicleTypeId',
+                    to: 'vehicle_type.id'
+                }
+            },
+
+            rides: {
+                relation: Model.HasManyRelation,
+                modelClass: ride,
+                join: {
+                    from: 'vehicle.id',
+                    to: 'ride.vehicleId'
+                }
+            }
+
+        }
+    }
+}
+
+class ride extends Model {
+    static get tableName(){
+        return 'ride';
+    }
+    static get relationMappings(){
+        return{
+            drivers: {
+                relation: Model.ManyToManyRelation,
+                modelClass: driver,
+                join: {
+                    from: 'ride.id',
+                    through: {
+                        from: 'drivers.rideId',
+                        to: 'drivers.driverId'
+                    },
+                    to: 'driver.id'
+                }
+            },
+            ride: {
+                relation: Model.HasOneRelation,
+                modelClass: vehicle,
+                join: {
+                    from: 'ride.vehicleId',
+                    to: 'vehicle.id'
+                }
             }
         }
     }
 }
 
+class vehicle_type extends Model {
+    static get tableName(){
+        return 'vehicle_type';
+    }
+    static get relationMappings(){
+        return {
+            vehicles: {
+                relation: Model.HasManyRelation,
+                modelClass: vehicle,
+                join: {
+                    from: 'vehicle_type.id',
+                    to: 'vehicle.vehicleTypeId'
+                },
+            }
+        }
+    }
+}
 
+class passenger extends Model {
+    static get tableName(){
+        return 'passenger';
+    }
+    static get relationMappings(){
+        return {
+            rides: {
+                relation: this.ManyToManyRelation,
+                modelClass: ride,
+                join: {
+                    from: 'passenger.id',
+                    through: {
+                        from: passengers.passengerId,
+                        to: rideId
+                    }
+                }
 
+            }
+        }
+    }
+}
 driver.query()
-    .then(drivers => {
-        console.log(drivers[0]);
+    .then(result => {
+        console.log(result);
     })
     .catch((err)=>{
         console.log(err);
@@ -72,6 +169,8 @@ driver.query()
         knex.destroy();
     });
 
+    // vehicle.query()
+    
 //  knex
 //      .select('firstname')
 //      .from('driver')
