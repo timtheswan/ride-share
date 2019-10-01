@@ -111,6 +111,22 @@ class ride extends Model {
                     from: 'ride.vehicleId',
                     to: 'vehicle.id'
                 }
+            },
+            from_location:{
+              relation: Model.BelongsToOneRelation,
+                modelClass: location,
+                join: {
+                  from: 'ride.fromLocationId',
+                    to: 'location.id'
+                }
+            },
+            to_location:{
+                relation: Model.BelongsToOneRelation,
+                modelClass: location,
+                join: {
+                    from: 'ride.toLocationId',
+                    to: 'location.id'
+                }
             }
         }
     }
@@ -185,7 +201,6 @@ class vehicle_type extends Model {
     }
 }
 
-<<<<<<< HEAD
 class passenger extends Model {
     static get tableName(){
         return 'passenger';
@@ -207,10 +222,7 @@ class passenger extends Model {
         }
     }
 }
-driver.query()
-    .then(result => {
-        console.log(result);
-=======
+
 // vehicle.query()
 //     .then(vehicle => {
 //         console.log(vehicle[0]);
@@ -249,7 +261,6 @@ driver.query()
 state.query()
     .then(state => {
         console.log(state[0]);
->>>>>>> 72b65909ad52cf211a16c7dace21bc990fcd8740
     })
     .catch((err)=>{
         console.log(err);
@@ -257,16 +268,6 @@ state.query()
     })
     .finally(()=>{
         knex.destroy();
-<<<<<<< HEAD
     });
 
     // vehicle.query()
-    
-//  knex
-//      .select('firstname')
-//      .from('driver')
-//      .then(result => console.log(result))
-//      .then(() => knex.destroy());
-=======
-    });
->>>>>>> 72b65909ad52cf211a16c7dace21bc990fcd8740
